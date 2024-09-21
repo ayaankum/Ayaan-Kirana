@@ -6,18 +6,24 @@ import com.assignment.kirana.model.TransactionResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
 public class TransactionService {
 
     private final Map<String, Double> rateCache = new HashMap<>();
+    @Autowired
+    private RedisTemplate<String, Double> redisTemplate;
+    private static final long CACHE_EXPIRATION = 60 * 60;
+
     private static final Logger log = LoggerFactory.getLogger(TransactionService.class);
     @Autowired
     private TransactionRepository transactionRepository;
@@ -53,9 +59,13 @@ public class TransactionService {
 
         //implemented rate caching
         String cacheKey = fromCurrency + "_" + toCurrency;
-        if (rateCache.containsKey(cacheKey)) {
-            return rateCache.get(cacheKey);
+        Double cachedRate = redisTemplate.opsForValue().get(cacheKey);
+        if (cachedRate != null) {
+            return cachedRate;
         }
+//        if (rateCache.containsKey(cacheKey)) {
+//            return rateCache.get(cacheKey);
+//        }
 
         String url = "https://api.fxratesapi.com/latest";
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url)
@@ -65,10 +75,9 @@ public class TransactionService {
         Map<String, Object> response = restTemplate.getForObject(uriBuilder.toUriString(), Map.class);
         Map<String, Double> rates = (Map<String, Double>) response.get("rates");
 
-        log.info(String.valueOf(rates.get(fromCurrency))+"into get exchnage");
-
         double exchangeRate = rates.getOrDefault(toCurrency, 1.0);
-        rateCache.put(cacheKey, exchangeRate);
+//        rateCache.put(cacheKey, exchangeRate);
+        redisTemplate.opsForValue().set(cacheKey, exchangeRate, CACHE_EXPIRATION, TimeUnit.SECONDS);
 
         return exchangeRate;
     }
