@@ -48,7 +48,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity
             http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-                .requestMatchers("/auth/registration","/auth/genToken").permitAll().anyRequest()
+                .requestMatchers("/auth/**").permitAll().anyRequest()
                 .authenticated().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);

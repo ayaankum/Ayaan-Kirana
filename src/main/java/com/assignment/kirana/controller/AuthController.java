@@ -51,17 +51,15 @@ public class AuthController {
 
     @GetMapping("/genToken")
     public String generateJwtToken(@RequestBody UserDTO userDto) throws Exception {
-
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getUserName(), userDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         return jwtGenVal.generateToken(authentication);
     }
 
     public ResponseEntity<Object> generateRespose(String message, HttpStatus st, Object responseobj) {
 
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("meaasge", message);
+        map.put("messasge", message);
         map.put("Status", st.value());
         map.put("data", responseobj);
 

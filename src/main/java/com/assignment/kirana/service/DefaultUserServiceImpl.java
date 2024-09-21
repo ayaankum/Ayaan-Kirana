@@ -2,6 +2,7 @@ package com.assignment.kirana.service;
 
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -45,15 +46,18 @@ public class DefaultUserServiceImpl implements DefaultUserService{
         Role role = new Role();
 
         if(userRegisteredDTO.getRole().equals("USER"))
-            role = roleRepo.findByRole("USER");
+            role = roleRepo.findByRole("ROLE_USER");
         else if(userRegisteredDTO.getRole().equals("ADMIN"))
-            role = roleRepo.findByRole("ADMIN");
+            role = roleRepo.findByRole("ROLE_ADMIN");
 
         User user = new User();
         user.setEmail(userRegisteredDTO.getEmail());
         user.setUserName(userRegisteredDTO.getUserName());
         user.setPassword(passwordEncoder.encode(userRegisteredDTO.getPassword()));
-        user.setRole(role);
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        user.setRole(roles);
         return userRepo.save(user);
     }
 }

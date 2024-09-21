@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -60,11 +62,15 @@ public class JwtGeneratorValidator {
     }
 
     private String createToken(Map<String, Object> claims, Authentication authentication) {
+
         String role =authentication.getAuthorities().stream()
                 .map(r -> r.getAuthority()).collect(Collectors.toSet()).iterator().next();
+
         return Jwts.builder().claim("role",role).setSubject(authentication.getName()).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5)))
                 .signWith(SignatureAlgorithm.HS256, SECRET).compact();
+
+
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {

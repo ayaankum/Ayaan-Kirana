@@ -18,7 +18,7 @@ public class User{
     private String email;
 
     @DBRef // Reference to Role documents
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> role = new HashSet<>();
 
     public String getUserName() {
         return userName;
@@ -45,14 +45,10 @@ public class User{
     }
 
     public Set<Role> getRole() {
-        return roles;
+        return role;
     }
 
-    public void setRole(Role role) {
-        this.roles.add(role);
-    }
-
-    public void addRole(Role role) {
-        this.roles.add(role);
+    public void setRole(Set<Role> role) {
+        this.role = role;
     }
 }
