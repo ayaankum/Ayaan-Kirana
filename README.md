@@ -58,8 +58,8 @@ POST http://localhost:8080/auth/registration
     "messasge": "User saved successfully : "
 }
 ```
-![Create Transaction](images/caching_image_1.png)
-![Create Transaction](images/caching_image_1.png)
+![Create Transaction](kirana%20doc/cu.png)
+
 ------------
 ### JWT Token Generation API
 **Purpose**: This API generates a JSON Web Token (JWT) for authenticated users, allowing them to access protected resources within the application.
@@ -83,8 +83,9 @@ GET http://localhost:8080/auth/genToken
 ```
 eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MONLYFORDISPLAYWFuQWRtaW4iLCJpYXQiOjE3MjY5OTM4NTAsImV4cCI6MTcyNjk5NDE1MH0.Dix7-zFyG0djENlWzpKeeoGEUWgfyF1IZzlBW3lBvNY
 ```
-![Create Transaction](images/caching_image_1.png)
-![Create Transaction](images/caching_image_1.png)
+![Create Transaction](kirana%20doc/gt.png)
+
+
 ------
 ### Record Transaction API
 **Purpose**: This API allows users (both ADMIN and USER roles) to create a new financial transaction by submitting details such as type, amount, currency, and description.
@@ -123,8 +124,8 @@ Roles: ADMIN, USER
 }
 }
 ```
-![Create Transaction](images/caching_image_1.png)
-![Create Transaction](images/caching_image_1.png)
+![Create Transaction](kirana%20doc/ct.png)
+
 
 #### Caching Mechanism 
 
@@ -132,8 +133,9 @@ Roles: ADMIN, USER
 - Subsequent requests for the same currency exchange rate retrieve the value directly from the Redis cache, improving performance.
 - The exchange rate data is initially fetched from an external API at https://api.fxratesapi.com/latest?Base=INR if not found in the cache.
   
-![Create Transaction](images/caching_image_1.png)
-![Create Transaction](images/caching_image_1.png)
+![Create Transaction](kirana%20doc/c2.png)
+![Create Transaction](kirana%20doc/c1.png)
+
 -----
 
 ### Report Generation API
@@ -220,11 +222,9 @@ Roles: ADMIN
 ]
 ```
 
-![Create Transaction](images/caching_image_1.png)
-![Create Transaction](images/caching_image_1.png)
+![Create Transaction](kirana%20doc/yr2.png)
+![Create Transaction](kirana%20doc/yr1.png)
 
-
- 
 ##### Monthly report
 ---
 
@@ -278,6 +278,8 @@ Roles: ADMIN
 ]
 ```
 
+![Create Transaction](kirana%20doc/mr2.png)
+![Create Transaction](kirana%20doc/mr1.png)
 
 ##### Weekly report
 ```http
@@ -348,6 +350,8 @@ Roles: ADMIN
     },
 ```
 
+![Create Transaction](kirana%20doc/wr1.png)
+![Create Transaction](kirana%20doc/wr2.png)
 
 ### API Rate Limiting
 
@@ -355,22 +359,36 @@ Roles: ADMIN
 - Rate limiting is implemented using `Resilience4j`, which helps control traffic and prevent server overload.
 - Endpoints Rate Limited: The /create and /report (weekly, monthly, yearly) endpoints are rate-limited to protect the system from excessive traffic.
 
+  
+![Create Transaction](kirana%20doc/yr2.png)
+
 ### MongoDB
 
 The MongoDB database consists of three collections—Users, Transactions, and Roles.
+
+![Create Transaction](kirana%20doc/mc.png)
+
 ##### Users Collection:
 
 - This collection stores the information of registered users, such as their userName, email, and password.
 - The user's role (like ADMIN or USER) is referenced in this collection.
 - When a user logs in, the system retrieves their details from this collection to authenticate and generate a JWT token.
+
+![Create Transaction](kirana%20doc/mu.png)
+
 ##### Transactions Collection:
 
 - The Transactions collection stores details of each transaction, including transactionId, amount, currency, type (debit/credit), and description.
 - The system also stores the converted amount in INR at the time of the transaction, which is later used for generating accurate reports.
 - This collection helps in tracking financial transactions and enables reporting based on stored data.
+
+![Create Transaction](kirana%20doc/mt.png)
+
 ##### Roles Collection:
 
 - This collection defines and stores the available roles in the system, currently limited to ADMIN and USER.
 - In the future, additional roles, can be added here.
 - The role is linked to each user, and the JWT generation service retrieves the user’s role from this collection to embed it into the token for authorization.
+
+![Create Transaction](kirana%20doc/mr.png)
 
