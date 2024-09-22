@@ -360,7 +360,7 @@ Roles: ADMIN
 - Endpoints Rate Limited: The /create and /report (weekly, monthly, yearly) endpoints are rate-limited to protect the system from excessive traffic.
 
   
-![Create Transaction](kirana%20doc/yr2.png)
+![Create Transaction](kirana%20doc/rl.png)
 
 ### MongoDB
 
