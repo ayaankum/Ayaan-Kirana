@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 public class TransactionRequest {
 
-    // Getters and Setters
     @Getter
     private String transactionId;
     private String type;
@@ -21,7 +20,6 @@ public class TransactionRequest {
     @Setter
     private String status;
 
-    // Constructors
     public TransactionRequest() {}
 
     public TransactionRequest(String transactionId, String type, double amount, String currency, String description,LocalDateTime now, double convertedAmount) {
