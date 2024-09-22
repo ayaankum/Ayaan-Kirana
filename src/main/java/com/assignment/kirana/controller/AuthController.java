@@ -50,10 +50,15 @@ public class AuthController {
 
 
     @GetMapping("/genToken")
-    public String generateJwtToken(@RequestBody UserDTO userDto) throws Exception {
-        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getUserName(), userDto.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        return jwtGenVal.generateToken(authentication);
+    public ResponseEntity<String> generateJwtToken(@RequestBody UserDTO userDto) throws Exception{
+        try{
+            Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getUserName(), userDto.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String token = jwtGenVal.generateToken(authentication);
+            return new ResponseEntity<>(token, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     public ResponseEntity<Object> generateRespose(String message, HttpStatus st, Object responseobj) {

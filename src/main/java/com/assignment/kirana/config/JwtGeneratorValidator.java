@@ -62,7 +62,6 @@ public class JwtGeneratorValidator {
     }
 
     private String createToken(Map<String, Object> claims, Authentication authentication) {
-
         String role =authentication.getAuthorities().stream()
                 .map(r -> r.getAuthority()).collect(Collectors.toSet()).iterator().next();
 
