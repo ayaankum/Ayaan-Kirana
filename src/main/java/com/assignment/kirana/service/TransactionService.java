@@ -50,7 +50,7 @@ public class TransactionService {
     return response;
   }
 
-  private double getExchangeRate(String fromCurrency, String toCurrency) {
+  public double getExchangeRate(String fromCurrency, String toCurrency) {
 
     // if fromCurrency and toCurrency is same return 1 does not need to make api call
     if (fromCurrency.equals(toCurrency)) return 1.0;
