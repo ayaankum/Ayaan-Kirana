@@ -1,5 +1,9 @@
 package com.assignment.kirana.config;
 
+import com.assignment.kirana.service.DefaultUserService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -8,9 +12,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,74 +20,74 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.assignment.kirana.service.DefaultUserService;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtGeneratorValidator {
 
-    @Autowired
-    DefaultUserService userService;
+  @Autowired DefaultUserService userService;
 
-    private final String SECRET = "ayaan-kirana-assignment";
+  private final String SECRET = "ayaan-kirana-assignment";
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
+  public String extractUsername(String token) {
+    return extractClaim(token, Claims::getSubject);
+  }
 
-    public Claims extractUserRole(String token) {
-        return extractAllClaims(token);
-    }
-    public Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
+  public Claims extractUserRole(String token) {
+    return extractAllClaims(token);
+  }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
-    public Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
-    }
+  public Date extractExpiration(String token) {
+    return extractClaim(token, Claims::getExpiration);
+  }
 
-    private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
+  public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    final Claims claims = extractAllClaims(token);
+    return claimsResolver.apply(claims);
+  }
 
-    public String generateToken(Authentication authentication) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, authentication);
-    }
+  public Claims extractAllClaims(String token) {
+    return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+  }
 
-    private String createToken(Map<String, Object> claims, Authentication authentication) {
-        String role =authentication.getAuthorities().stream()
-                .map(r -> r.getAuthority()).collect(Collectors.toSet()).iterator().next();
+  private Boolean isTokenExpired(String token) {
+    return extractExpiration(token).before(new Date());
+  }
 
-        return Jwts.builder().claim("role",role).setSubject(authentication.getName()).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5)))
-                .signWith(SignatureAlgorithm.HS256, SECRET).compact();
+  public String generateToken(Authentication authentication) {
+    Map<String, Object> claims = new HashMap<>();
+    return createToken(claims, authentication);
+  }
 
+  private String createToken(Map<String, Object> claims, Authentication authentication) {
+    String role =
+        authentication.getAuthorities().stream()
+            .map(r -> r.getAuthority())
+            .collect(Collectors.toSet())
+            .iterator()
+            .next();
 
-    }
+    return Jwts.builder()
+        .claim("role", role)
+        .setSubject(authentication.getName())
+        .setIssuedAt(new Date(System.currentTimeMillis()))
+        .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5)))
+        .signWith(SignatureAlgorithm.HS256, SECRET)
+        .compact();
+  }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
-    }
+  public Boolean validateToken(String token, UserDetails userDetails) {
+    final String username = extractUsername(token);
+    return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+  }
 
-    public UsernamePasswordAuthenticationToken getAuthenticationToken(final String token, final Authentication existingAuth, final UserDetails userDetails) {
+  public UsernamePasswordAuthenticationToken getAuthenticationToken(
+      final String token, final Authentication existingAuth, final UserDetails userDetails) {
 
-        Claims claims = extractAllClaims(token);
+    Claims claims = extractAllClaims(token);
 
-        final Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get("role").toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
-
-        return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
-    }
-
+    final Collection<? extends GrantedAuthority> authorities =
+        Arrays.stream(claims.get("role").toString().split(","))
+            .map(SimpleGrantedAuthority::new)
+            .collect(Collectors.toList());
+    return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
+  }
 }

@@ -1,56 +1,58 @@
 package com.assignment.kirana.model;
 
 public class ReportResponse {
-    private String transactionId;
-    private String type;
-    private double amount;
-    private String currency;
-    private String description;
-    private String status;
-    public String getTransactionId() {
-        return transactionId;
-    }
+  private String transactionId;
+  private String type;
+  private double amount;
+  private String currency;
+  private String description;
+  private String status;
 
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
-    }
+  public String getTransactionId() {
+    return transactionId;
+  }
 
-    public String getType() {
-        return type;
-    }
+  public void setTransactionId(String transactionId) {
+    this.transactionId = transactionId;
+  }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+  public String getType() {
+    return type;
+  }
 
-    public double getAmount() {
-        return amount;
-    }
+  public void setType(String type) {
+    this.type = type;
+  }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
+  public double getAmount() {
+    return amount;
+  }
 
-    public String getCurrency() {
-        return currency;
-    }
+  public void setAmount(double amount) {
+    this.amount = amount;
+  }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
+  public String getCurrency() {
+    return currency;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public void setCurrency(String currency) {
+    this.currency = currency;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-    public String getStatus(){
-        return status;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  public String getStatus() {
+    return status;
+  }
 }
