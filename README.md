@@ -3,13 +3,14 @@
 ## Overview
 This document outlines the available APIs for managing transactions, generating reports, and user authentication within the application. Caching of exchange rates is handled using Redis.
 ### Content
-- [User Registration API](###user-registration-api)
-- [JWT Token Generation](#jwt-token-generation)
-- [Create Transaction API](#create-transaction-api)
-- [Report Generation API](#report-generation-api)
-- [Tech Stack](#tech-stack)
-- [Caching Mechanism](#caching-mechanism)
-- [Rate Limiting](#rate-limiting)
+- User Registration API
+- JWT Token Generation API
+- Create Transaction API
+- Report Generation API
+- Tech Stack
+- Caching Mechanism
+- Rate Limiting
+- MongoDB
 
 
 ## Techstack
@@ -353,4 +354,23 @@ Roles: ADMIN
 - The API limits certain endpoints to a maximum of `10 requests per minute` to prevent abuse and ensure fair usage.
 - Rate limiting is implemented using `Resilience4j`, which helps control traffic and prevent server overload.
 - Endpoints Rate Limited: The /create and /report (weekly, monthly, yearly) endpoints are rate-limited to protect the system from excessive traffic.
+
+### MongoDB
+
+The MongoDB database consists of three collections—Users, Transactions, and Roles.
+##### Users Collection:
+
+- This collection stores the information of registered users, such as their userName, email, and password.
+- The user's role (like ADMIN or USER) is referenced in this collection.
+- When a user logs in, the system retrieves their details from this collection to authenticate and generate a JWT token.
+##### Transactions Collection:
+
+- The Transactions collection stores details of each transaction, including transactionId, amount, currency, type (debit/credit), and description.
+- The system also stores the converted amount in INR at the time of the transaction, which is later used for generating accurate reports.
+- This collection helps in tracking financial transactions and enables reporting based on stored data.
+##### Roles Collection:
+
+- This collection defines and stores the available roles in the system, currently limited to ADMIN and USER.
+- In the future, additional roles, can be added here.
+- The role is linked to each user, and the JWT generation service retrieves the user’s role from this collection to embed it into the token for authorization.
 
