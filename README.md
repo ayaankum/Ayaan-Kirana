@@ -132,7 +132,7 @@ Roles: ADMIN, USER
 - When a request for a currency exchange rate is made, the result is stored in Redis to reduce the need for frequent external API calls.
 - Subsequent requests for the same currency exchange rate retrieve the value directly from the Redis cache, improving performance.
 - The exchange rate data is initially fetched from an external API at https://api.fxratesapi.com/latest?Base=INR if not found in the cache.
-  
+
 ![Create Transaction](kirana%20doc/c2.png)
 ![Create Transaction](kirana%20doc/c1.png)
 
