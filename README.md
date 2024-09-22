@@ -360,7 +360,7 @@ Roles: ADMIN
 - Endpoints Rate Limited: The /create and /report (weekly, monthly, yearly) endpoints are rate-limited to protect the system from excessive traffic.
 
   
-![Create Transaction](kirana%20doc/yr2.png)
+![Create Transaction](kirana%20doc/rl.png)
 
 ### MongoDB
 
@@ -391,4 +391,10 @@ The MongoDB database consists of three collections—Users, Transactions, and Ro
 - The role is linked to each user, and the JWT generation service retrieves the user’s role from this collection to embed it into the token for authorization.
 
 ![Create Transaction](kirana%20doc/mr.png)
+
+### Exception Handling
+
+When user is not registered
+
+![userNotfound](kirana%20doc/userNotfound.png)
 
