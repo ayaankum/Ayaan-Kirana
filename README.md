@@ -392,3 +392,9 @@ The MongoDB database consists of three collections—Users, Transactions, and Ro
 
 ![Create Transaction](kirana%20doc/mr.png)
 
+### Exception Handling
+
+When user is not registered
+
+![userNotfound](kirana%20doc/userNotfound.png)
+
