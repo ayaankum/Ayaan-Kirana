@@ -3,10 +3,10 @@
 ## Overview
 This document outlines the available APIs for managing transactions, generating reports, and user authentication within the application. Caching of exchange rates is handled using Redis.
 ### Content
-- User Registration API
-- JWT Token Generation API
-- Create Transaction API
-- Report Generation API
+- User Registration endpoint
+- JWT Token Generation endpoint 
+- Create Transaction endpoint
+- Report Generation endpoint
 - Tech Stack
 - Caching Mechanism
 - Rate Limiting
@@ -20,7 +20,7 @@ This document outlines the available APIs for managing transactions, generating 
 - **Resilience4j**: Used for rate limiting to protect the APIs from being overwhelmed by too many requests per minute.
 - **JWT**: Used for Authentication and role based Authorization.
 -----------
-### User Registration API
+### User Registration
 **Purpose**: This API allows the registration of a new user in the system, enabling them to gain access based on their assigned role (ADMIN or USER).
 
 **Request Body**: The API expects a JSON object containing the user's username, password, email, and role, where the role can be either "ADMIN" or "USER".
@@ -61,7 +61,7 @@ POST http://localhost:8080/auth/registration
 ![Create Transaction](kirana%20doc/cu.png)
 
 ------------
-### JWT Token Generation API
+### JWT Token Generation
 **Purpose**: This API generates a JSON Web Token (JWT) for authenticated users, allowing them to access protected resources within the application.
 
 **Request Body**: The API expects a JSON object containing the user's username and password to authenticate the user.
