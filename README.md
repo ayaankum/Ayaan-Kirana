@@ -1,7 +1,7 @@
 # KiranaAPI Documentation
 
 ## Overview
-This document outlines the available APIs for managing transactions, generating reports, and user authentication within the application. Caching of exchange rates is handled using Redis.
+This document provides a comprehensive overview of the APIs available for managing `transactions`, `generating reports`, and facilitating `user authentication` using `JWT token` within the application. Additionally, `exchange rate caching` is implemented using `Redis`, and `unit test cases` have been developed to validate the functionality of these APIs.
 ### Content
 - User Registration endpoint
 - JWT Token Generation endpoint 
